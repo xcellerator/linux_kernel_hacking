@@ -1,8 +1,8 @@
 # Linux Kernel Hacking
 
-## 0.0: Basic LKM Example
+## 0.1: Character Devices
 
-This is about as simple as it gets.
+Simple character device file.
 
 To use:
 * Build with `make` and load with `make test`
