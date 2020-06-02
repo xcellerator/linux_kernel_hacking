@@ -5,3 +5,9 @@ all:
 
 clean:
 	make -C /lib/modules/$(shell uname -r)/build M=$(PWD) clean
+
+test:
+	sudo dmesg -C
+	sudo insmod example.ko
+	sudo rmmod example.ko
+	dmesg

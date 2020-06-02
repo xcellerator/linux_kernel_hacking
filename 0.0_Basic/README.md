@@ -12,4 +12,7 @@ To use:
 * Unload with `rmmod example.ko`
 * Check the second output in the kernel buffer with `dmesg`
 
+Alternatively:
+* Run `make test` and observe the two outputs as the module is loaded/unloaded.
+
 > NOTE: You'll need `build-essential` and `linux-headers-$(uname -r)` installed.
