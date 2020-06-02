@@ -16,3 +16,5 @@ Alternatively:
 * Run `make test` and observe the two outputs as the module is loaded/unloaded.
 
 > NOTE: You'll need `build-essential` and `linux-headers-$(uname -r)` installed.
+
+> Followed along from [here](https://blog.sourcerer.io/writing-a-simple-linux-kernel-module-d9dc3762c234?gi=2f8d0507c4e8).
