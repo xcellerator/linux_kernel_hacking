@@ -11,3 +11,5 @@ To use:
 * See the module loaded in `lsmod | grep example`
 * Unload with `rmmod example.ko`
 * Check the second output in the kernel buffer with `dmesg`
+
+> NOTE: You'll need `build-essential` and `linux-headers-$(uname -r)` installed.
