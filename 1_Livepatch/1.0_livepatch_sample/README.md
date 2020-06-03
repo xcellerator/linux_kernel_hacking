@@ -12,3 +12,5 @@ To use:
 * Check the output again of `cat /proc/cmdline`
 * Disable the livepatch with `echo 0 | sudo tee /sys/kernel/livepatch/livepatch-sample/enabled`
 * Unload from the kernel with `rmmod livepatch-sample.ko`
+
+> Tested on Ubuntu 20.04 running under Vagrant.
