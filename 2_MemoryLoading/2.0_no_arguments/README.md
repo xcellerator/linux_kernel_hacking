@@ -12,4 +12,4 @@ To use:
 * Unload with `rmmod example`
 * Check the second output in the kernel buffer with `dmesg`
 
-> NOTE: If you aren't running kernel `5.4.0-33-generic` (Ubuntu 20.04 currently), then you will need to recompile [`example.ko`](../../0_Basic_LKMs/0.0_Basic/), and replace the `example_ko` and `example_ko_len` lines with the output of `xxd -i example.ko`.
+> NOTE: This assumes that `example.ko` is in the current directory. If your LKM is named something else, change the first line in the [`Makefile`](./Makefile).
