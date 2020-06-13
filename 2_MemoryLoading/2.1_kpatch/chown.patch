@@ -1,0 +1,12 @@
+diff --git a/fs/open.c b/fs/open.c
+index 6cd48a61cda3..0602d7d7e530 100644
+--- a/fs/open.c
++++ b/fs/open.c
+@@ -720,6 +720,7 @@ int do_fchownat(int dfd, const char __user *filename, uid_t user, gid_t group,
+ 		goto retry;
+ 	}
+ out:
++	printk(KERN_NOTICE "UID:GID %d:%d now owns the file %s\n", user, group, filename);
+ 	return error;
+ }
+ 
