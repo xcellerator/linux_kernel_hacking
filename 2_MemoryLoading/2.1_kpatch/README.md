@@ -1,6 +1,6 @@
 # Linux Kernel Hacking
 
-## 2.0: Loading a Kernel Module from Memory (Kpatch)
+## 2.0: Loading a Kernel Module from Memory (Kpatching `chown`)
 
 Patch the kernel with a single executable!
 
