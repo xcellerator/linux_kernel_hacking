@@ -11,3 +11,5 @@ To use:
 * See that the module is missing from the output of `lsmod`
 
 > NOTE: Currently, you can't unload this kernel module without rebooting
+
+> Inspired, in part, by [this](https://github.com/m0nad/Diamorphine) repo.
