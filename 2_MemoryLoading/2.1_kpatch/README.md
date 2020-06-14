@@ -1,6 +1,6 @@
 # Linux Kernel Hacking
 
-## 2.0: Loading a Kernel Module from Memory (No Arguments)
+## 2.0: Loading a Kernel Module from Memory (Kpatch)
 
 Patch the kernel with a single executable!
 
