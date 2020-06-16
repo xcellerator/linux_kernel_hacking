@@ -9,6 +9,7 @@ We have to use the `pt_regs` struct defined in [`arch/x86/include/asm/ptrace.h`]
 ```C
 typedef asmlinkage long (*orig_mkdir_t)(const struct pt_regs *);
 orig_mkdir_t orig_mkdir;
+```
 
 This means that we can wrap around this syscall by doing whatever we want to do in our hook, and then just pass the entire `pt_regs` struct over to this function pointer with `orig_mkdir(regs)` when we're done.
 
