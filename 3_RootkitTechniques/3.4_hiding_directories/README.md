@@ -1,6 +1,6 @@
 # Linux Kernel Hacking
 
-## 3.3: Hiding files/directories
+## 3.4: Hiding files/directories
 
 This is probably the most complicated syscall hook yet. As far as the kernel module goes, the structure is the same as the others in this section - we find the syscall table, and then hook a syscall with our own replacement, in this case, we hook `sys_getdents64`.
 
