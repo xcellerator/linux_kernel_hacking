@@ -1,4 +1,5 @@
 Vagrantfile
+.vagrant
 *.mk
 *.cmd
 *.symvers
