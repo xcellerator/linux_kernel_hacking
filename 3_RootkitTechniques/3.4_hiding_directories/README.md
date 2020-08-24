@@ -2,6 +2,8 @@
 
 ## 3.4: Hiding files/directories
 
+> Updated to use [ftrace](https://www.kernel.org/doc/html/latest/trace/ftrace.html) instead of directly modifying kernel memory
+
 This is probably the most complicated syscall hook yet. As far as the kernel module goes, the structure is the same as the others in this section - we find the syscall table, and then hook a syscall with our own replacement, in this case, we hook `sys_getdents64`.
 
 What makes this task more difficult is that we are actually altering the structs that are returned to the user. First, we extract the *userspace* `dirent` struct from the `si` register in `regs`, and then call the real `sys_getdents64` and save the result in `ret`. Then, we have to `copy_from_user` the *userspace* `dirent` struct to the *kernelspace* `dirent_ker` struct so that we can probe and alter it's contents. At this point, we loop through the directory entries using `offset` (initially set to `0`, and incremented by the `d_reclen` field of each dirent as we proceed through the entries).
