@@ -10,7 +10,7 @@
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("TheXcellerator");
 MODULE_DESCRIPTION("Giving root privileges to a process");
-MODULE_VERSION("0.01");
+MODULE_VERSION("0.02");
 
 /* After Kernel 4.17.0, the way that syscalls are handled changed
  * to use the pt_regs struct instead of the more familiar function
