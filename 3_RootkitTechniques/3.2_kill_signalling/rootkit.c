@@ -84,7 +84,7 @@ static asmlinkage int hook_kill(pid_t pid, int sig)
 	}
 	else
 	{
-		return orig_kill(regs);
+		return orig_kill(pid, sig);
 	}
 }
 #endif
