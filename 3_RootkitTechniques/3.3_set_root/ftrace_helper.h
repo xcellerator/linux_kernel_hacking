@@ -33,7 +33,7 @@
  * protection and implement our own).
  * */
 #define USE_FENTRY_OFFSET 0
-#if !USE_ENTRY_OFFSET
+#if !USE_FENTRY_OFFSET
 #pragma GCC optimize("-fno-optimize-sibling-calls")
 #endif
 
