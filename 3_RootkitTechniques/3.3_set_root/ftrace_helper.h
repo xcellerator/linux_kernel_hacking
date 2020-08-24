@@ -9,6 +9,10 @@
 #include <linux/slab.h>
 #include <linux/uaccess.h>
 
+#if defined(CONFIG_X86_64) && (LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0))
+#define PTREGS_SYSCALL_STUBS 1
+#endif
+
 /* x64 has to be special and require a different naming convention */
 #ifdef PTREGS_SYSCALL_STUBS
 #define SYSCALL_NAME(name) ("__x64_" name)
