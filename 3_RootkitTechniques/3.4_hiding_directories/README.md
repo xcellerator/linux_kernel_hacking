@@ -4,6 +4,8 @@
 
 > Updated to use [ftrace](https://www.kernel.org/doc/html/latest/trace/ftrace.html) instead of directly modifying kernel memory
 
+> Sadly, this module is a lot bigger when we use ftrace. The reason is that we end up repeating the hook function *four* times - two copies each of both `sys_getdents` and `sys_getdents64`, using both the `pt_regs` struct and the old-fashioned function declaration (for kernel versions <4.17 - looking at you Ubuntu 16.04...)
+
 This is probably the most complicated syscall hook yet. As far as the kernel module goes, the structure is the same as the others in this section - we find the syscall table, and then hook a syscall with our own replacement, in this case, we hook `sys_getdents64`.
 
 What makes this task more difficult is that we are actually altering the structs that are returned to the user. First, we extract the *userspace* `dirent` struct from the `si` register in `regs`, and then call the real `sys_getdents64` and save the result in `ret`. Then, we have to `copy_from_user` the *userspace* `dirent` struct to the *kernelspace* `dirent_ker` struct so that we can probe and alter it's contents. At this point, we loop through the directory entries using `offset` (initially set to `0`, and incremented by the `d_reclen` field of each dirent as we proceed through the entries).
