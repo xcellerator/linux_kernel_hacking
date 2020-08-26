@@ -2,6 +2,8 @@
 
 ## 3.3: Custom Signals To Give Root Privileges To A Process
 
+> Updated to use [ftrace](https://www.kernel.org/doc/html/latest/trace/ftrace.html) instead of directly modifying kernel memory
+
 Similar to [Section 3.2](../3.2_kill_signalling/), we can abuse hooking `sys_kill` to trigger a function that gives root to any process that sends a `64` signal to a process (as before, signal `64` is normally unused).
 
 According to [credentials.rst](https://github.com/torvalds/linux/blob/master/Documentation/security/credentials.rst#altering-credentials), we can only modify the `cred` struct of our own process, and not that of any other process. This means that we can't give an already running process root privileges unless we send the `64` signal from that process! Quite a clever security feature!
