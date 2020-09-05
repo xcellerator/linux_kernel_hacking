@@ -15,3 +15,5 @@ To use:
 * Read some bytes from `/dev/urandom` with `dd if=/dev/urandom bs=1 count=128 | xxd`
 * Observe that both reads return nothing but `0x00`!
 * Unload with `rmmod rootkit`
+
+![random](./random.png "Interfering with char devices")
