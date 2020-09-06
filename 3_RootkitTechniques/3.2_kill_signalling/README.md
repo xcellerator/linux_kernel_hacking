@@ -4,9 +4,9 @@
 
 > Updated to use [ftrace](https://www.kernel.org/doc/html/latest/trace/ftrace.html) instead of directly modifying kernel memory
 
-We can use the same syscall hijacking method from [Section 3.1](../3.1_syscall_hooking/) to hijack the `sys_kill` syscall rather than `sys_mkdir`. This lets us implement our own custom signals to call different functions within the rootkit. In this case, we use signal `64` (normally unused) to tell the module hide or unhide itself (using the `hideme()` and `showme()` functions from [Section 3.0](../3.0_hiding_lkm/)).
+We can use the same syscall hijacking method from [Section 3.1](../3.1_syscall_hooking/) to hijack the `sys_kill` syscall rather than `sys_mkdir`. This lets us implement our own custom signals to call different functions within the rootkit. In this case, we use signal `64` (normally unused) to tell the module to hide or unhide itself (using the `hideme()` and `showme()` functions from [Section 3.0](../3.0_hiding_lkm/)).
 
-> NOTE: While experimenting with this module, I found that the kernel kept panicking and crashing if I probed the calls to `sys_mkdir` too often, i.e. trying to `printk` every call signal send to every pid. I think this is probably something to do with a race condition somewhere, but I'm not certain.
+> NOTE: While experimenting with this module, I found that the kernel kept panicking and crashing if I probed the calls to `sys_kill` too often, i.e. trying to `printk` every call signal send to every pid. I think this is probably something to do with a race condition somewhere, but I'm not certain.
 
 To use:
 * Build with `make`
