@@ -2,6 +2,8 @@
 
 ## 3.8: Privileged Container Escapes
 
+> Full write up [here](https://xcellerator.github.io/posts/docker_escape/)!
+
 When privileged Linux containers attempt to load kernel modules, the modules are loaded into the host's kernel (because there is only *one* kernel, unlike VMs). This provides a route to an easy container escape.
 
 Unlike other techniques, this module doesn't contain any syscalls hooks, but merely creates two new proc files; `/proc/escape` and `/proc/output`.
