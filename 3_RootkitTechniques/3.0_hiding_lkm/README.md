@@ -2,7 +2,9 @@
 
 ## 3.0: Hiding Kernel Modules
 
-Hide a kernel module after loading it
+> Please check out the blog post for an in-depth explanation on how this module works. You can find it [here](https://xcellerator.github.io/posts/linux_rootkits_05/).
+
+Hide a kernel module after loading it.
 
 To use:
 * Build with `make`
