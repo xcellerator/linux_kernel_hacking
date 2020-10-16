@@ -2,7 +2,7 @@
 
 ## 3.9: Hiding Logged On Users
 
-> A blog post detailing this module in more detail will be coming (hopefully) in a few weeks
+> A blog post is now up with much more detail on how this work! Check it out [here](https://xcellerator.github.io/posts/linux_rootkits_09/)!
 
 In order to discover active user sessions, *most* userspace programs read the contents of `/var/run/utmp` (if you know of a program that does it another way, please let me know!). This is a binary file filled with `utmp` structs (see `man utmp`, or [`utmp.h`](./utmp.h)). By parsing this file, we can hide entries from userspace for which the `ut_user` field matches a pre-set value (in this case, `root`, but could be anything).
 
