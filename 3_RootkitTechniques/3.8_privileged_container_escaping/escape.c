@@ -58,7 +58,6 @@ ssize_t escape_write(struct file *file, const char *buf, size_t len, loff_t *off
     char *kbuf = NULL;
     long error;
     char *suffix = " > /proc/output";
-    char *command ;
 
     /*
      * Allocate a kernel buffer to read the command input into
@@ -90,7 +89,6 @@ ssize_t escape_write(struct file *file, const char *buf, size_t len, loff_t *off
      * Cleanup and return
      */
     kfree(kbuf);
-    kfree(command);
     return len;
 }
 
