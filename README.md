@@ -6,4 +6,6 @@ Ongoing series of blog posts on rootkit techniques can be found [here](https://x
 
 Educational purposes only.
 
-Tested on Ubuntu 20.04 and 16.04,via Vagrant - should work on most kernels.
+Tested on Ubuntu 20.04 and 16.04, via Vagrant - should work on most kernels.
+
+> Updated to work with kernels 5.7+
