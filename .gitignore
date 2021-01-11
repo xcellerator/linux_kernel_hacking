@@ -5,6 +5,7 @@ Vagrantfile
 *.symvers
 *.ko
 *.o
+*.o.d
 *.order
 *.tmp_versions
 *.mod.c
