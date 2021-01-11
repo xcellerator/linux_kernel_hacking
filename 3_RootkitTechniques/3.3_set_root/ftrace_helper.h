@@ -8,21 +8,28 @@
 #include <linux/linkage.h>
 #include <linux/slab.h>
 #include <linux/uaccess.h>
+#include <linux/version.h>
 
 #if defined(CONFIG_X86_64) && (LINUX_VERSION_CODE >= KERNEL_VERSION(4,17,0))
 #define PTREGS_SYSCALL_STUBS 1
 #endif
 
-/* x64 has to be special and require a different naming convention */
-#ifdef PTREGS_SYSCALL_STUBS
-#define SYSCALL_NAME(name) ("__x64_" name)
-#else
-#define SYSCALL_NAME(name) (name)
+/*
+ * On Linux kernels 5.7+, kallsyms_lookup_name() is no longer exported, 
+ * so we have to use kprobes to get the address.
+ * Full credit to @f0lg0 for the idea.
+ */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,7,0)
+#define KPROBE_LOOKUP 1
+#include <linux/kprobes.h>
+static struct kprobe kp = {
+    .symbol_name = "kallsyms_lookup_name"
+};
 #endif
 
 #define HOOK(_name, _hook, _orig)   \
 {                   \
-    .name = SYSCALL_NAME(_name),        \
+    .name = (_name),        \
     .function = (_hook),        \
     .original = (_orig),        \
 }
@@ -60,6 +67,13 @@ struct ftrace_hook {
  * */
 static int fh_resolve_hook_address(struct ftrace_hook *hook)
 {
+#ifdef KPROBE_LOOKUP
+    typedef unsigned long (*kallsyms_lookup_name_t)(const char *name);
+    kallsyms_lookup_name_t kallsyms_lookup_name;
+    register_kprobe(&kp);
+    kallsyms_lookup_name = (kallsyms_lookup_name_t) kp.addr;
+    unregister_kprobe(&kp);
+#endif
     hook->address = kallsyms_lookup_name(hook->name);
 
     if (!hook->address)

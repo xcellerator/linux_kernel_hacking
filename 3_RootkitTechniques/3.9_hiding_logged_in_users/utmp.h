@@ -39,7 +39,7 @@ struct utmp {
     } ut_tv;
 #else
     long        ut_session;
-    struct      timeval ut_tv;
+//    struct      timeval ut_tv;
 #endif
 
     int32_t     ut_addr_v6[4];
