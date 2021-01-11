@@ -295,8 +295,8 @@ static asmlinkage int hook_pread64(int fd, const __user *buf, size_t count, loff
 
 /* Declare the struct that ftrace needs to hook the syscall */
 static struct ftrace_hook hooks[] = {
-    HOOK("sys_openat", hook_openat, &orig_openat),
-    HOOK("sys_pread64", hook_pread64, &orig_pread64),
+    HOOK("__x64_sys_openat", hook_openat, &orig_openat),
+    HOOK("__x64_sys_pread64", hook_pread64, &orig_pread64),
 };
 
 /* Module initialization function */

