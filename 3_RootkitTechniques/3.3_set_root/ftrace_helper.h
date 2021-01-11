@@ -78,6 +78,7 @@ static int fh_resolve_hook_address(struct ftrace_hook *hook)
     kallsyms_lookup_name_t kallsyms_lookup_name;
     register_kprobe(&kp);
     kallsyms_lookup_name = (kallsyms_lookup_name_t) kp.addr;
+    unregister_kprobe(&kp);
 #endif
     hook->address = kallsyms_lookup_name(hook->name);
 
