@@ -26,16 +26,9 @@ static struct kprobe kp = {
 };
 #endif
 
-/* x64 has to be special and require a different naming convention */
-#ifdef PTREGS_SYSCALL_STUBS
-#define SYSCALL_NAME(name) ("__x64_" name)
-#else
-#define SYSCALL_NAME(name) (name)
-#endif
-
 #define HOOK(_name, _hook, _orig)   \
 {                   \
-    .name = SYSCALL_NAME(_name),        \
+    .name = (_name),        \
     .function = (_hook),        \
     .original = (_orig),        \
 }
