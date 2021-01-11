@@ -191,6 +191,7 @@ static const struct proc_ops proc_file_fops_escape = {
 
 static const struct proc_ops proc_file_fops_output = {
     .proc_write = output_write,
+    .proc_read = output_read,
 };
 #else
 static const struct file_operations proc_file_fops_escape = {
