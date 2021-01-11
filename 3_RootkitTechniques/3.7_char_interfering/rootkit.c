@@ -34,7 +34,7 @@ static asmlinkage ssize_t hook_random_read(struct file *file, char __user *buf, 
 
     if(error)
     {
-        printk(KERN_DEBUG "rootkit: %d bytes could not be copied into kbuf\n", error);
+        printk(KERN_DEBUG "rootkit: %ld bytes could not be copied into kbuf\n", error);
         kfree(kbuf);
         return bytes_read;
     }
@@ -48,7 +48,7 @@ static asmlinkage ssize_t hook_random_read(struct file *file, char __user *buf, 
      */
     error = copy_to_user(buf, kbuf, bytes_read);
     if (error)
-        printk(KERN_DEBUG "rootkit: %d bytes could not be copied into buf\n", error);
+        printk(KERN_DEBUG "rootkit: %ld bytes could not be copied into buf\n", error);
 
     kfree(kbuf);
     return bytes_read;
@@ -72,7 +72,7 @@ static asmlinkage ssize_t hook_urandom_read(struct file *file, char __user *buf,
 
     if(error)
     {
-        printk(KERN_DEBUG "rootkit: %d bytes could not be copied into kbuf\n", error);
+        printk(KERN_DEBUG "rootkit: %ld bytes could not be copied into kbuf\n", error);
         kfree(kbuf);
         return bytes_read;
     }
@@ -86,7 +86,7 @@ static asmlinkage ssize_t hook_urandom_read(struct file *file, char __user *buf,
      */
     error = copy_to_user(buf, kbuf, bytes_read);
     if (error)
-        printk(KERN_DEBUG "rootkit: %d bytes could not be copied into buf\n", error);
+        printk(KERN_DEBUG "rootkit: %ld bytes could not be copied into buf\n", error);
 
     kfree(kbuf);
     return bytes_read;
