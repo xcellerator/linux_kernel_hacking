@@ -13,6 +13,7 @@
 #include <linux/syscalls.h>
 #include <linux/proc_fs.h>
 #include <linux/umh.h>
+#include <linux/version.h>
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("Xcellerator");
@@ -180,7 +181,20 @@ out:
 
 /*
  * structs for the 2 procfs files we need
+ * In kernel 5.6+, file_operations is replaced by proc_ops
  */
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(5,6,0)
+// proc_ops version
+static const struct proc_ops proc_file_fops_escape = {
+    .proc_write = escape_write,
+};
+
+static const struct proc_ops proc_file_fops_output = {
+    .proc_write = output_write,
+    .proc_read = output_read,
+};
+#else
+// file_operations version
 static const struct file_operations proc_file_fops_escape = {
     .owner = THIS_MODULE,
     .write = escape_write,
@@ -191,6 +205,7 @@ static const struct file_operations proc_file_fops_output = {
     .read = output_read,
     .write = output_write,
 };
+#endif
 
 /*
  * LKM init function
