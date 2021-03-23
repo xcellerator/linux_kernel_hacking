@@ -25,3 +25,5 @@ To use:
 * List the directory contents of wherever you placed the "boogaloo" file, e.g. `ls`
 * Observe that the "boogaloo" file is missing!
 * Unload with `rmmod rootkit`
+
+> Inspired, in part, by the [Diamorphine](https://github.com/m0nad/Diamorphine) repo.

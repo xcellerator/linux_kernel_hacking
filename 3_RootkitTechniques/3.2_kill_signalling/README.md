@@ -18,3 +18,5 @@ To use:
 * Send signal `64` to any pid again e.g. `kill -64 1'
 * Observe that the `rootkit` is back in the output of `lsmod`
 * Unload with `rmmod rootkit`
+
+> Inspired, in part, by the [Diamorphine](https://github.com/m0nad/Diamorphine) repo.

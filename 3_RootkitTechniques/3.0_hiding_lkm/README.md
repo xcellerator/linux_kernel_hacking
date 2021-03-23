@@ -14,4 +14,4 @@ To use:
 
 > NOTE: Currently, you can't unload this kernel module without rebooting
 
-> Inspired, in part, by [this](https://github.com/m0nad/Diamorphine) repo.
+> Inspired, in part, by the [Diamorphine](https://github.com/m0nad/Diamorphine) repo.

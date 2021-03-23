@@ -20,3 +20,5 @@ To use:
   * Note that the signal won't actually be sent to the pid you specify, so any number will do!
 * Check `whoami` again, and observe that you are now root!
 * Unload with `rmmod rootkit`
+
+> Inspired, in part, by the [Diamorphine](https://github.com/m0nad/Diamorphine) repo.

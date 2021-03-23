@@ -19,3 +19,5 @@ To use:
 * Unload with `rmmod rootkit`
 
 > Note: Currently, only a single pid at a time can be hidden! Trying to hide another pid will work fine, but it will reveal the first one!
+
+> Inspired, in part, by the [Diamorphine](https://github.com/m0nad/Diamorphine) repo.
