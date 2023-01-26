@@ -22,6 +22,7 @@ To use:
 * Build with `make`
 * Create a file/directory that starts with the string "boogaloo", e.g. `touch boogaloo`
 * Load with `insmod rootkit.ko`
+  * Alternatively, `insmod rootkit.ko PREFIX="hideme"` would hide files and folders starting with "hideme"
 * List the directory contents of wherever you placed the "boogaloo" file, e.g. `ls`
 * Observe that the "boogaloo" file is missing!
 * Unload with `rmmod rootkit`
