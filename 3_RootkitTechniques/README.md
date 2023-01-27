@@ -15,4 +15,3 @@ As far as the function hooking goes, it's quite simple. We give a function decla
 * [Diamorphine](https://github.com/m0nad/Diamorphine)
 * [Reptile](https://github.com/f0rb1dd3n/Reptile)
 * [Ftrace](https://github.com/ilammy/ftrace-hook)
-* [EXEC-LKM](https://github.com/loneicewolf/EXEC_LKM)
