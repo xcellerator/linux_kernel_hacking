@@ -13,6 +13,7 @@ Also included in this directory is a program called `enum_utmp`. This program wi
 To use:
 * Build with `make`
 * Load with `insmod rootkit.ko`
+  * Alternatively - one may use `insmod rootkit.ko HIDDEN_USER="some_username"` where `"some_username"` is a username to be hidden. By default, it hides the "root" user
 * In another terminal, spawn a root shell via `sudo screen -S root_login`
 * Back in the non-root user's terminal, run `who` or `finger` and confirm that `root` does NOT appear in the list
 * Unload the module with `rmmod rootkit`

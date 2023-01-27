@@ -8,7 +8,12 @@
 
 #include "ftrace_helper.h"
 
-#define PREFIX "boogaloo"
+/*
+ * The PREFIX "boogaloo" can be a default
+ * and hard coded value.
+ */
+static char *PREFIX = "boogaloo";
+module_param(PREFIX, charp, S_IRUGO);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("TheXcellerator");

